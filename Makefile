@@ -1,9 +1,6 @@
 test:
 	ls
 
-host:
-	sudo echo "10.10.20.15 arw.loc" >> /etc/hosts
-
 build:
 	docker-compose build
 
@@ -13,18 +10,18 @@ up:
 down:
 	docker-compose down
 
-exec:
-	docker-compose exec --user local php_fpm /bin/sh
+exec-site:
+	docker-compose exec --user local php_fpm_site /bin/sh
 
-root:
-	docker-compose exec php_fpm /bin/sh
+exec-wh:
+	docker-compose exec --user local php_fpm_wh /bin/sh
+
+root-site:
+	docker-compose exec php_fpm_site /bin/sh
+
+root-wh:
+	docker-compose exec php_fpt_wh /bin/sh
 
 ps:
 	docker-compose ps
-
-rm:
-	docker rm $(docker ps -aq)
-
-rmi:
-	docker rmi -f $(docker images -q)
 

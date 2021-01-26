@@ -22,8 +22,7 @@ services:
     container_name: ${DOCKER_CONTAINER_PREFIX}_nginx_wh
     volumes:
       - ./configs/nginx/wh:/etc/nginx/conf.d/
-      - ./${DOCKER_BACKEND}:/var/www/back
-#      - ./${DOCKER_FRONTEND}:/var/www/front
+      - ./${DOCKER_BACKEND_WH}:/var/www/back
     command: [nginx-debug, '-g', 'daemon off;']
     links:
       - php_fpm_wh:php_fpm_wh
@@ -36,7 +35,6 @@ services:
   php_fpm_site:
     image: ${DOCKER_IMAGE_PREFIX}_php_fpm:${DOCKER_TAG}
     container_name: ${DOCKER_CONTAINER_PREFIX}_php_fpm_site
-#    restart: ${DOCKER_RESTART}
     build:
       context: ./configs/php_fpm/
       dockerfile: Dockerfile
@@ -54,11 +52,9 @@ services:
       proxy_net:
         ipv4_address: ${DOCKER_HOST_PHP_FPM_SITE}
 
-
   php_fpm_wh:
     image: ${DOCKER_IMAGE_PREFIX}_php_fpm:${DOCKER_TAG}
     container_name: ${DOCKER_CONTAINER_PREFIX}_php_fpm_wh
-#    restart: ${DOCKER_RESTART}
     build:
       context: ./configs/php_fpm/
       dockerfile: Dockerfile
