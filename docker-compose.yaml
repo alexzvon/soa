@@ -1,0 +1,89 @@
+version: '3.3'
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: ${DOCKER_CONTAINER_PREFIX}_nginx
+    volumes:
+      - ./configs/nginx:/etc/nginx/conf.d/
+      - ./${DOCKER_BACKEND}:/var/www/back
+      - ./${DOCKER_FRONTEND}:/var/www/front
+    command: [nginx-debug, '-g', 'daemon off;']
+    links:
+#      - nodejs:nodejs
+      - php_fpm:php_fpm
+    depends_on:
+#      - nodejs
+      - php_fpm
+    networks:
+      proxy_net:
+        ipv4_address: ${DOCKER_HOST_NGINX}
+
+  php_fpm:
+    image: ${DOCKER_IMAGE_PREFIX}_php_fpm:${DOCKER_TAG}
+    container_name: ${DOCKER_CONTAINER_PREFIX}_php_fpm
+#    restart: ${DOCKER_RESTART}
+    build:
+      context: ./configs/php_fpm/
+      dockerfile: Dockerfile
+    volumes:
+      - ./${DOCKER_BACKEND}:/var/www/back
+    links:
+      - mysql:mysql
+      - redis:redis
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - PHP_IDE_CONFIG=serverName=server
+    networks:
+      proxy_net:
+        ipv4_address: ${DOCKER_HOST_PHP_FPM}
+
+#  nodejs:
+#    image:          ${DOCKER_IMAGE_PREFIX}_nodejs:${DOCKER_TAG}
+#    container_name: ${DOCKER_CONTAINER_PREFIX}_nodejs
+#    build:
+#      context:    ./configs/nodejs
+#      dockerfile: Dockerfile
+#    volumes:
+#      - ./${DOCKER_FRONTEND}:/var/www/front
+#    env_file:
+#      - ./${DOCKER_FRONTEND}/.env
+#    networks:
+#      proxy_net:
+#        ipv4_address: ${DOCKER_HOST_NODEJS}
+
+  redis:
+    image: redis:6.0-rc-alpine3.11
+    container_name: ${DOCKER_CONTAINER_PREFIX}_redis
+    networks:
+      proxy_net:
+        ipv4_address: ${DOCKER_HOST_REDIS}
+
+  mysql:
+    image: mysql
+    container_name: ${DOCKER_CONTAINER_PREFIX}_mysql
+    command: [
+      '--default-authentication-plugin=mysql_native_password',
+      '--innodb_use_native_aio=0',
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci'
+    ]
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    networks:
+      proxy_net:
+        ipv4_address: ${DOCKER_HOST_MYSQL}
+
+networks:
+  proxy_net:
+    ipam:
+      config:
+        - subnet: ${DOCKER_SUBNET}
