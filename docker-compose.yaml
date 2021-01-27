@@ -40,6 +40,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./${DOCKER_BACKEND_SITE}:/var/www/back
+    extra_hosts:
+      - "weater_history.loc:10.10.77.18"
     links:
       - mysql:mysql
       - redis:redis
@@ -60,6 +62,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./${DOCKER_BACKEND_WH}:/var/www/back
+    extra_hosts:
+      - "site.loc:10.10.77.15"
     links:
       - mysql:mysql
       - redis:redis

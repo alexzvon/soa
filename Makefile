@@ -20,7 +20,7 @@ root-site:
 	docker-compose exec php_fpm_site /bin/sh
 
 root-wh:
-	docker-compose exec php_fpt_wh /bin/sh
+	docker-compose exec php_fpm_wh /bin/sh
 
 ps:
 	docker-compose ps

@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'wh' => [
+        'base_uri' => 'weater_history.loc/',
+        'id' => 1,
+    ]
+
 ];
