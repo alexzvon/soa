@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +24,5 @@ Route::get('/', function (Request $request) {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 
 

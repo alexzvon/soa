@@ -38,5 +38,4 @@ class WeatherController extends CoreController
 
         return $result;
     }
-
 }
