@@ -2,33 +2,33 @@
 
 Скачать клон
 
->git clone https://github.com/alexzvon/soa.git
+<p>>git clone https://github.com/alexzvon/soa.git</p>
 
 Перейти в корневой каталог soa
 
->cat .env.example > .env
+<p>>cat .env.example > .env</p>
 
 Перейти каталог сайта site.loc
-
->cd site
+<p>
+>cd site<br>
 >cat .env.example > .env
-
+</p>
 Перейти в корневой каталог soa
 
->cd ..
+<p>>cd ..</p>
 
 Перейти каталог сайта weater_history.loc
-
->cd weater_history
+<p>
+>cd weater_history<br>
 >cat .env.example > .env
-
+<p>
 Перейти в корневой каталог soa
 
->cd ..
+<p>>cd ..</p>
 
 Под root добавить в /etc/hosts 
 
-10.10.77.15    site.loc
+10.10.77.15    site.loc<br>
 10.10.77.18    weater_history.loc
 
 Перед началом сборки рекомендую очистить все имиджи.
@@ -41,22 +41,22 @@
 
 Запускаем проект
 
->make up
+<p>>make up</p>
 
 если сборка прошла успешно - то должны стартовать все контейнеры, проверить можно командой
 
->make ps
+<p>>make ps</p>
 
 должна показаться что-то вроде этого
 
       Name                    Command               State          Ports       
 -------------------------------------------------------------------------------
-soa_mysql          docker-entrypoint.sh --def ...   Up      3306/tcp, 33060/tcp
-soa_nginx_site     /docker-entrypoint.sh ngin ...   Up      80/tcp             
-soa_nginx_wh       /docker-entrypoint.sh ngin ...   Up      80/tcp             
-soa_php_fpm_site   docker-php-entrypoint supe ...   Up      9000/tcp           
-soa_php_fpm_wh     docker-php-entrypoint supe ...   Up      9000/tcp           
-soa_redis          docker-entrypoint.sh redis ...   Up      6379/tcp   
+soa_mysql          docker-entrypoint.sh --def ...   Up      3306/tcp, 33060/tcp<br>
+soa_nginx_site     /docker-entrypoint.sh ngin ...   Up      80/tcp<br>             
+soa_nginx_wh       /docker-entrypoint.sh ngin ...   Up      80/tcp<br>             
+soa_php_fpm_site   docker-php-entrypoint supe ...   Up      9000/tcp<br>           
+soa_php_fpm_wh     docker-php-entrypoint supe ...   Up      9000/tcp<br>           
+soa_redis          docker-entrypoint.sh redis ...   Up      6379/tcp<br>   
 
 Теперь необходимо создать БД. Сервер находится 10.10.77.12 root:qazwsxedc
 БД должны называться site и wh. 
@@ -68,26 +68,25 @@ soa_redis          docker-entrypoint.sh redis ...   Up      6379/tcp
 
 Переходим в контейнер сайта site.loc
 
->make exec-site
+<p>>make exec-site</p>
 
 Собираем сайт site.loc
 
->composer install
->npm install && npm run dev
->php artisan migrate
->exit
-
+<p>>composer install</p>
+<p>>npm install && npm run dev</p>
+<p>>php artisan migrate</p>
+<p>>exit</p>
 
 Переходим в контейнер сайта weater_history.loc
 
->make exec-wh
+<p>>make exec-wh</p>
 
 Собираем сайт weater_history.loc
-
->composer install
->npm install && npm run dev
->php artisan migrate
->php artisan db:seed --class=HistorySeeder
->exit
-
+<p>
+>composer install<br>
+>npm install && npm run dev<br>
+>php artisan migrate<br>
+>php artisan db:seed --class=HistorySeeder<br>
+>exit<br>
+</p>
 Набираем в браузере site.log - все вуаля.
